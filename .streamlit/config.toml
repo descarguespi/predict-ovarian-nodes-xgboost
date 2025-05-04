@@ -1,8 +1,8 @@
 [theme]
 base="light"
-primaryColor="#0077b6"
-backgroundColor="#ffffff"
-secondaryBackgroundColor="#f1f3f6"
+primaryColor="#0077b6"            # Bleu médical principal
+backgroundColor="#ffffff"         # Fond blanc
+secondaryBackgroundColor="#e3f2fd" # Bleu clair doux
 textColor="#000000"
 font="sans serif"
 
