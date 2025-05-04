@@ -17,9 +17,13 @@ pipeline = joblib.load("pipeline_3var_definitif.pkl")
 st.title("Lymph Node Involvement Prediction – Ovarian Cancer")
 
 # Formulaire d'entrée utilisateur
-menopause = st.selectbox("Menopause", [0, 1])
+menopause_str = st.selectbox("Menopause", ["No", "Yes"])
 taille_tumorale = st.number_input("Tumor size (cm)", min_value=0.0, max_value=60.0, value=10.0)
-atteinte_bilaterale = st.selectbox("Bilateral ovarian involvement", [0, 1])
+atteinte_str = st.selectbox("Bilateral ovarian involvement", ["No", "Yes"])
+
+# Convertir en 0/1 pour le modèle
+menopause = 1 if menopause_str == "Yes" else 0
+atteinte_bilaterale = 1 if atteinte_str == "Yes" else 0
 
 if st.button("Predict"):
     X_input = pd.DataFrame([{
