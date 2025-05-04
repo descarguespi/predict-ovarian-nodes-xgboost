@@ -9,6 +9,10 @@ Created on Sun May  4 10:39:12 2025
 import streamlit as st
 import pandas as pd
 import joblib
+st.image("https://raw.githubusercontent.com/streamlit/branding/master/logos/streamlit-logo-secondary-colormark-darktext.png", width=200)
+st.title("🧬 Ovarian Cancer – Node Risk Prediction")
+st.markdown("A clinical decision-support tool based on a 3-variable XGBoost model.")
+st.markdown("---")
 
 # Chargement du pipeline
 pipeline = joblib.load("pipeline_3var_definitif.pkl")
