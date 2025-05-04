@@ -6,28 +6,30 @@ Created on Sun May  4 10:39:12 2025
 @author: Pierre
 """
 
+import streamlit as st
 import pandas as pd
 import joblib
 
-# Charger le modèle pipeline entraîné
+# Chargement du pipeline
 pipeline = joblib.load("pipeline_3var_definitif.pkl")
 
-# Charger les données d'entrée (à adapter selon ton fichier)
-df_input = pd.read_excel("example_input.xlsx")  # ⚠️ Assure-toi que ce fichier a les bonnes colonnes
+# Titre
+st.title("Lymph Node Involvement Prediction – Ovarian Cancer")
 
-# Vérification des colonnes attendues
-required_columns = ["menopause", "taille_tumorale", "atteinte_ovarienne_bilaterale"]
-if not all(col in df_input.columns for col in required_columns):
-    raise ValueError(f"Le fichier doit contenir les colonnes suivantes : {required_columns}")
+# Formulaire d'entrée utilisateur
+menopause = st.selectbox("Menopause", [0, 1])
+taille_tumorale = st.number_input("Tumor size (cm)", min_value=0.0, max_value=60.0, value=10.0)
+atteinte_bilaterale = st.selectbox("Bilateral ovarian involvement", [0, 1])
 
-# Prédiction
-proba = pipeline.predict_proba(df_input)[:, 1]
-df_input["Predicted Risk"] = proba
-df_input["Low Risk (<0.02)"] = (proba < 0.02).astype(int)
-
-# Affichage
-print(df_input)
-
-# Sauvegarde éventuelle
-df_input.to_excel("prediction_results.xlsx", index=False)
-print("✅ Résultats sauvegardés dans prediction_results.xlsx")
+if st.button("Predict"):
+    X_input = pd.DataFrame([{
+        "menopause": menopause,
+        "taille_tumorale": taille_tumorale,
+        "atteinte_ovarienne_bilaterale": atteinte_bilaterale
+    }])
+    proba = pipeline.predict_proba(X_input)[0, 1]
+    st.write(f"Predicted probability of lymph node involvement: **{proba:.3f}**")
+    if proba < 0.02:
+        st.success("Low-risk profile – lymph node staging could be omitted.")
+    else:
+        st.error("At-risk profile – lymph node staging recommended.")
